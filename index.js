@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
+require('./services/passport.js')
+
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/final-project-app')
   .then(() => console.log('[mongoose] Connected to MongoDB'))
@@ -17,6 +19,12 @@ const authenticationRoutes = require('./routes/authentication');
 
 app.use(bodyParser.json());
 app.use('/api', authenticationRoutes);
+
+const authStrategy = passport.authenticate('authStrategy', { session: false })
+
+app.get('/api/secret', authStrategy, function(req, res, next) {
+    res.send(`Logged in as ${req.user.username}`)
+})
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
