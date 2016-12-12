@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/todo-list-app')
+mongoose.connect('mongodb://localhost/final-project-app')
   .then(() => console.log('[mongoose] Connected to MongoDB'))
   .catch(() => console.log('[mongoose] Error connecting to MongoDB'));
 
