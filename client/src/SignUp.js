@@ -12,7 +12,7 @@ class SignUp extends Component {
     }
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     this.props.onSignUp({
@@ -22,7 +22,7 @@ class SignUp extends Component {
     });
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     const { name, value } = event.target;
 
     this.setState(prev => ({
@@ -33,7 +33,7 @@ class SignUp extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={this.handleSubmit}>
         <FormGroup>
           <ControlLabel>Username</ControlLabel>
           <FormControl

@@ -6,8 +6,79 @@ import TopNavbar from './TopNavbar';
 import Secret from './Secret';
 import axios from 'axios';
 
-class App extends Component {
+export default class App extends Component {
+    constructor() {
+        super()
 
+        this.state = {
+            signUpSignInError: '',
+            authenticated: localStorage.getItem('token')
+        }
+    }
+
+    handleSignUp = (credentials) => {
+        const { username, password, confirmPassword } = credentials
+
+        if (!username.trim() || !password.trim() || password.trim() !== confirmPassword.trim()) {
+            this.setState({
+                ...this.state,
+                signUpSignInError: 'Must provide input for all fields.'
+            })
+        }
+        else {
+            axios.post('/api/signup', credentials)
+            .then(resp => {
+                const { token } = resp.data
+                this.setState({
+                    ...this.state,
+                    signUpSignInError: '',
+                    authenticated: token
+                })
+                localStorage.setItem('token', token)
+            })
+        }
+    }
+
+    handleSignIn = (credentials) => {
+        const { username, password, confirmPassword } = credentials
+        //TODO: fill it in mane
+    }
+
+    renderSignUpSignIn = () => {
+        return <SignUpSignIn error={this.state.signUpSignInError} onSignUp={this.handleSignUp} />
+    }
+
+    renderApp() {
+        return (
+            <div>
+                <Match
+                    exactly 
+                    pattern="/" 
+                    render={() => <h1>I am protected!</h1>} 
+                />
+                <Match 
+                    exactly 
+                    pattern="/secret" 
+                    component={Secret} 
+                />
+                <Miss 
+                    render={() => <h1>Not Found...</h1>} />
+            </div>
+        )
+    }
+    
+    render() {
+        return (
+            <BrowserRouter>
+                <div className="App">
+                    <TopNavbar 
+                        showNavItems={true} 
+                        onSignOut={this.handleSignOut} 
+                    />
+                    {this.state.authenticated ? this.renderApp() : this.renderSignUpSignIn}
+                </div>
+            </BrowserRouter>
+        )
+    }
 }
 
-export default App;
