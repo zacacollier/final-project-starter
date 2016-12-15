@@ -9,6 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "proxy": "http://localhost:3001",
   "devDependencies": {
     "foreman": "^2.0.0",
     "nodemon": "^1.11.0"

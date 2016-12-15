@@ -15,8 +15,8 @@ const TopNavbar = (props) => {
         props.showNavItems ?
           <Navbar.Collapse>
             <Nav pullRight>
-                <NavItem onClick={props.onSignOut}>
-                    Sign Out
+                <NavItem isSignedIn={props.onSignIn} onClick={props.onSignOut}>
+                   { !!props.isSignedIn ? 'Sign In' : 'Sign Out' }
                 </NavItem>
             </Nav>
             <Nav pullRight>

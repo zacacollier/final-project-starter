@@ -36,6 +36,13 @@ export default class App extends Component {
                 })
                 localStorage.setItem('token', token)
             })
+                 .catch((err) => {
+                     let resp = Object.values(err)
+                     let error = resp[1].data.error
+                     this.setState({
+                         signUpSignInError: error
+                     })
+                 })
         }
     }
 
