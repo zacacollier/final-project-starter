@@ -1,21 +1,11 @@
 const ListModel = require('../models/ListModel');
 
 module.exports = {
+
   list(req, res, next) {
     ListModel.find({ user: req.user._id })
       .exec()
       .then(lists => res.json(lists))
-      .catch(next)
-  },
-
-  show(req, res, next) {
-    ListModel.findOne({
-      user: req.user._id,
-      _id: req.params.id
-    })
-      .populate('items')
-      .exec()
-      .then(list => res.json(list))
       .catch(next)
   },
 
@@ -28,17 +18,31 @@ module.exports = {
       .then(list => res.json(list))
       .catch(next)
   },
+  
+  show(req, res, next) {
+    ListModel.findOne({
+      user: req.user._id,
+      _id: req.params.id
+    })
+      .populate('items')
+      .exec()
+      .then(list => res.json(list))
+      .catch(next)
+  },
 
   update(req, res, next) {
     ListModel.findOneAndUpdate({
+      title: req.params.title,
       user: req.user._id,
       _id: req.params.id,
     },
       {
-        title: req.params.title,
+        $set: {
+        title: req.body.title,
+        }
       },
       {
-        new: true
+          new: true
       }
     )
     .exec()
