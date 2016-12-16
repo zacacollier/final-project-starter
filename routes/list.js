@@ -12,6 +12,9 @@ router.post('/', ListsController.create);
 // Show a single List
 router.get('/:id', ListsController.show);
 
+// Edit a single List
+router.post('/:id', ListsController.update);
+
 // Delete a single List
 router.delete('/:id', ListsController.remove);
 

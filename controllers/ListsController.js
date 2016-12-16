@@ -5,17 +5,7 @@ module.exports = {
     ListModel.find({ user: req.user._id })
       .exec()
       .then(lists => res.json(lists))
-      .catch(next);
-  },
-
-  create(req, res, next) {
-    new ListModel({
-      title: req.body.title,
-      user: req.user._id
-    })
-      .save()
-      .then(list => res.json(list))
-      .catch(next);
+      .catch(next)
   },
 
   show(req, res, next) {
@@ -26,7 +16,34 @@ module.exports = {
       .populate('items')
       .exec()
       .then(list => res.json(list))
-      .catch(next);
+      .catch(next)
+  },
+
+  create(req, res, next) {
+    new ListModel({
+      title: req.body.title,
+      user: req.user._id
+    })
+      .save()
+      .then(list => res.json(list))
+      .catch(next)
+  },
+
+  update(req, res, next) {
+    ListModel.findOneAndUpdate({
+      user: req.user._id,
+      _id: req.params.id,
+    },
+      {
+        title: req.params.title,
+      },
+      {
+        new: true
+      }
+    )
+    .exec()
+    .then(list => res.json(list))
+    .catch(next)
   },
 
   remove(req, res, next) {
@@ -36,7 +53,6 @@ module.exports = {
     })
       .exec()
       .then(list => res.json(list))
-      .catch(next);
+      .catch(next)
   }
 }
-```

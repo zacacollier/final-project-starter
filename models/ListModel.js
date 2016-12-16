@@ -13,10 +13,12 @@ const listSchema = new mongoose.Schema({
     required: true
   },
 
-  items: [{
+  items: [
+    {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item',
-  }],
+    },
+  ],
 });
 
 module.exports = mongoose.model('List', listSchema);

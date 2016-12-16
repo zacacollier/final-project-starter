@@ -32,6 +32,7 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 3001;
+
 app.listen(port, () => {
   console.log(`Now listening on localhost:${port}`);
 });
@@ -39,7 +40,3 @@ app.listen(port, () => {
 //    res.send(`Logged in as ${req.user.username}`)
 // })
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-  console.log(`Listening on port:${port}`);
-});
