@@ -18,11 +18,14 @@ const app = express();
 
 const authenticationRoutes = require('./routes/authentication');
 const listRoutes = require('./routes/list');
+const itemRoutes = require('./routes/item');
+
 const authStrategy = passport.authenticate('authStrategy', { session: false });
 
 app.use(bodyParser.json());
 app.use('/api', authenticationRoutes);
 app.use('/api/lists', authStrategy, listRoutes);
+app.use('/api/items', authStrategy, itemRoutes);
 
 app.use((err, req, res, next) => {
   return res.status(500).send(`Server Error: ${err}`)

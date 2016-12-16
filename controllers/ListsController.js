@@ -23,6 +23,7 @@ module.exports = {
       user: req.user._id,
       _id: req.params.id
     })
+      .populate('items')
       .exec()
       .then(list => res.json(list))
       .catch(next);
