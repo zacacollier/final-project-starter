@@ -47,6 +47,13 @@ export default class App extends Component {
     }
 
     handleSignIn = (credentials) => {
+        const { username, password } = credentials
+        if (!username.trim() || !password.trim()) {
+            this.setState({
+                ...this.state,
+                signUpSignInError: 'Must provide a valid input for all fields.'
+            })
+        }
         axios.post('/api/signin', credentials)
         .then(resp => {
             const { token } = resp.data
@@ -58,6 +65,11 @@ export default class App extends Component {
         })
     }
 
+    handleAlertClick = () => {
+        this.setState({
+            signUpSignInError: ''
+        })
+    }
     handleSignOut = (credentials) => {
         localStorage.removeItem('token')
         this.setState({
@@ -65,7 +77,12 @@ export default class App extends Component {
         })
     }
     renderSignUpSignIn = () => {
-        return <SignUpSignIn error={this.state.signUpSignInError} onSignUp={this.handleSignUp} />
+        return <SignUpSignIn
+                   error={this.state.signUpSignInError}
+                   onSignUp={this.handleSignUp}
+                   onSignIn={this.handleSignIn}
+                   onAlertClick={this.handleAlertClick}
+               />
     }
 
     renderApp() {
