@@ -13,7 +13,6 @@ export default class SignIn extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-
     this.props.onSignIn({
       username: this.state.username,
       password: this.state.password
