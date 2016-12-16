@@ -7,10 +7,10 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 
 const signinStrategy = new LocalStrategy(function(username, password, done) {
     User.findOne({ username: username }).exec()
-    .then(user => {
-        if (!user) {
-            return done(null, false)
-        }
+        .then(user => {
+            if (!user) {
+                return done(null, false)
+            }
 
         bcrypt.compare(password, user.password, function(err, isMatch) {
             if (err) {

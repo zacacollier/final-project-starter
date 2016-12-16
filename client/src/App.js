@@ -36,13 +36,13 @@ export default class App extends Component {
                 })
                 localStorage.setItem('token', token)
             })
-                 .catch((err) => {
-                     let resp = Object.values(err)
-                     let error = resp[1].data.error
-                     this.setState({
-                         signUpSignInError: error
-                     })
-                 })
+            .catch((err) => {
+                let resp = Object.values(err)
+                let error = resp[1].data.error
+                this.setState({
+                    signUpSignInError: error
+                })
+            })
         }
     }
 
@@ -54,15 +54,24 @@ export default class App extends Component {
                 signUpSignInError: 'Must provide a valid input for all fields.'
             })
         }
-        axios.post('/api/signin', credentials)
-        .then(resp => {
-            const { token } = resp.data
-            this.setState({
-                ...this.state,
-                renderSignUpSignIn: '',
-                authenticated: token
+        else {
+            axios.post('/api/signin', {
+                    username,
+                    password,
+                headers: {
+                    authorization: localStorage.getItem('token')
+                }
             })
-        })
+                 .then(resp => {
+                     const { token } = resp.data
+                     localStorage.setItem('token', token)
+                     this.setState({
+                         ...this.state,
+                         renderSignUpSignIn: '',
+                         authenticated: token
+                     })
+            })
+        }
     }
 
     handleAlertClick = () => {
