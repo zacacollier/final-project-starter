@@ -18,7 +18,7 @@ module.exports = {
       .then(list => res.json(list))
       .catch(next)
   },
-  
+
   show(req, res, next) {
     ListModel.findOne({
       user: req.user._id,
@@ -51,12 +51,12 @@ module.exports = {
   },
 
   remove(req, res, next) {
-    ListModel.findOneAndRemove({
+    ListModel.findOne({
+      _id: req.params.id,
       user: req.user._id,
-      _id: req.params.id
     })
       .exec()
       .then(list => res.json(list))
       .catch(next)
-  }
+    }
 }
