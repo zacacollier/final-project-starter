@@ -37,13 +37,9 @@ module.exports = {
       _id: req.params.id,
     },
       {
-        $set: {
-        title: req.body.title,
-        }
+        $set: { title: req.body.title }
       },
-      {
-          new: true
-      }
+      { new: true }
     )
     .exec()
     .then(list => res.json(list))
@@ -51,11 +47,23 @@ module.exports = {
   },
 
   remove(req, res, next) {
-    ListModel.findOneAndRemove({
+    ListModel.findOneAndUpdate({
       _id: req.params.id,
       user: req.user._id,
-    })
+    },
+      {
+        $unset: { items: null }
+      },
+      { new: true }
+    )
       .exec()
+      .then(res => {
+        ListModel.findOneAndRemove({
+          _id: req.params.id,
+          user: req.user._id
+        })
+        .exec()
+      })
       .then(list => res.json(list))
       .catch(next)
     }
