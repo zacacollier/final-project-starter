@@ -51,7 +51,7 @@ module.exports = {
   },
 
   remove(req, res, next) {
-    ListModel.findOne({
+    ListModel.findOneAndRemove({
       _id: req.params.id,
       user: req.user._id,
     })
