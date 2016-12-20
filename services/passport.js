@@ -45,5 +45,6 @@ const authStrategy = new JwtStrategy(jwtOptions, function(payload, done) {
         }
     })
 })
+
 passport.use('authStrategy', authStrategy)
 passport.use('signinStrategy', signinStrategy)
