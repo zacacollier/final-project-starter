@@ -1,10 +1,9 @@
 const GitHubApi = require('github');
 
-let github = new GitHubApi({
+const github = new GitHubApi({
   debug: true,
   protocol: "https",
   host: "api.github.com",
-  baseUri: "https://api.github.com",
   headers: {
     "user-agent": "zacacollier"
   },
@@ -12,11 +11,7 @@ let github = new GitHubApi({
   timeout: 5000
 });
 
-github.users.getFollowingForUser({
-  username: "zacacollier"
-})
-  .then(response => console.log(JSON.stringify(response)))
+// Get single user
+github.users.getForUser({ username:'zacacollier' })
+  .then(res => console.log(res))
   .catch(err => console.log(err))
-
-
-
