@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
+import Suggestion from './Suggestion.js'
 
 export default class GitHubSearchBar extends Component {
   constructor (props) {
@@ -7,7 +8,7 @@ export default class GitHubSearchBar extends Component {
 
     this.state = {
       value: '',
-      suggestions: []
+      results: []
     }
   }
 
@@ -24,11 +25,24 @@ export default class GitHubSearchBar extends Component {
     const URL = `https://api.github.com/users/${this.state.value}`;
     event.preventDefault();
     axios.get(URL)
-      .then(res => this.setState({ suggestions: [res.data] }))
+      .then(res => {
+        if (res.statusCode !== 404) {
+          this.setState({
+            results: [res.data]
+          })
+        }
+      }
+      )
       .catch(err => console.log(err))
   }
 
-  render () {
+  renderSuggestion() {
+    return(
+      <Suggestion results={this.state.results} />
+    )
+  }
+
+  render() {
     const inputProps = {
       placeholder: 'Search for a Github username...',
       value: this.state.value,
@@ -37,9 +51,10 @@ export default class GitHubSearchBar extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-        <input type="text" onChange={this.handleChange} />
-        <input type="submit" value="Submit" />
+          <input type="text" onChange={this.handleChange} />
+          <input type="submit" value="Submit" />
         </form>
+        { this.state.results && this.renderSuggestion() }
       </div>
     );
   }
