@@ -20,7 +20,11 @@ module.exports = {
       }
       foundList = list;
       return new ItemModel({
-        text: req.body.text,
+        username: req.body.login,
+        realname: req.body.name,
+        avatar: req.body.avatar,
+        githubID: req.body.id,
+        repos: req.body.public_repos,
         user: userId,
         list: listId,
       }).save();

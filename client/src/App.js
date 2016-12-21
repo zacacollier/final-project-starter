@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Match, Miss } from 'react-router';
-import './App.css';
+import axios from 'axios';
+
 import SignUpSignIn from './SignUpSignIn';
 import TopNavbar from './TopNavbar';
+import GitHubSearchBar from './GitHubSearchBar.js';
 import Secret from './Secret';
-import axios from 'axios';
+import './App.css';
+
 
 export default class App extends Component {
     constructor() {
@@ -86,12 +89,14 @@ export default class App extends Component {
         })
     }
     renderSignUpSignIn = () => {
-        return <SignUpSignIn
+        return (
+          <SignUpSignIn
                    error={this.state.signUpSignInError}
                    onSignUp={this.handleSignUp}
                    onSignIn={this.handleSignIn}
                    onAlertClick={this.handleAlertClick}
                />
+        );
     }
 
     renderApp() {
@@ -100,17 +105,17 @@ export default class App extends Component {
                 <Match
                     exactly
                     pattern="/"
-                    render={() => <h1>I am protected!</h1>}
+                    render={() => <GitHubSearchBar />}
                 />
                 <Match
                     exactly
                     pattern="/secret"
                     component={Secret}
                 />
-                <Miss 
+                <Miss
                     render={() => <h1>Not Found...</h1>} />
             </div>
-        )
+        );
     }
 
     render() {
@@ -124,7 +129,7 @@ export default class App extends Component {
                     {this.state.authenticated ? this.renderApp() : this.renderSignUpSignIn()}
                 </div>
             </BrowserRouter>
-        )
+        );
     }
 }
 

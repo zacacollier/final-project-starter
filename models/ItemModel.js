@@ -2,8 +2,27 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const itemSchema = new mongoose.Schema({
-  text: {
+  username: {
     type: String,
+    required: true,
+  },
+
+  realname: {
+    type: String,
+    required: true,
+  },
+
+  avatar: {
+    type: String,
+  },
+
+  githubID: {
+    type: Number,
+    required: true,
+  },
+
+  repos: {
+    type: Number,
     required: true,
   },
 
