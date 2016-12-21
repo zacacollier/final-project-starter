@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Match, Miss } from 'react-router';
 import axios from 'axios';
-
+import Modal from 'react-modal';
+import { Alert } from 'react-bootstrap';
+import ReactTimeout from 'react-timeout';
 import SignUpSignIn from './SignUpSignIn';
 import TopNavbar from './TopNavbar';
 import GitHubSearchBar from './GitHubSearchBar.js';
@@ -15,6 +17,7 @@ export default class App extends Component {
 
         this.state = {
             signUpSignInError: '',
+            signInSuccess: false,
             authenticated: localStorage.getItem('token')
         }
     }
@@ -50,6 +53,7 @@ export default class App extends Component {
     }
 
     handleSignIn = (credentials) => {
+      //TODO: add a nice spinner to verify auth success
         const { username, password } = credentials
         if (!username.trim() || !password.trim()) {
             this.setState({
@@ -70,7 +74,8 @@ export default class App extends Component {
                      localStorage.setItem('token', token)
                      this.setState({
                          ...this.state,
-                         renderSignUpSignIn: '',
+                         signUpSignInError: '',
+                         signInSuccess: true,
                          authenticated: token
                      })
             })
@@ -85,6 +90,7 @@ export default class App extends Component {
     handleSignOut = (credentials) => {
         localStorage.removeItem('token')
         this.setState({
+            signInSuccess: false,
             authenticated: false
         })
     }
@@ -92,12 +98,13 @@ export default class App extends Component {
         return (
           <SignUpSignIn
                    error={this.state.signUpSignInError}
+                   isOpen={this.state.signInSuccess}
                    onSignUp={this.handleSignUp}
                    onSignIn={this.handleSignIn}
                    onAlertClick={this.handleAlertClick}
-               />
-        );
-    }
+            />
+    );
+}
 
     renderApp() {
         return (
@@ -105,7 +112,29 @@ export default class App extends Component {
                 <Match
                     exactly
                     pattern="/"
-                    render={() => <GitHubSearchBar />}
+                    render={() => {
+                      return(
+                        <div>
+                          <Modal
+                            isOpen={this.state.signInSuccess}
+                            onAfterOpen={setTimeout(() => {
+                              this.setState({
+                              signInSuccess: false
+                              })
+                            }, 4000)
+                            }
+                            onRequestClose={this.props.onRequestClose}
+                            closeTimeoutMS={3000}
+                            contentLabel="Modal"
+                          >
+                            <Alert onClick={this.handleAlertClick} bsStyle="success">
+                              <strong>Logged In Successfully!</strong>
+                            </Alert>
+                          </Modal>
+                          <GitHubSearchBar />
+                        </div>
+                      )}
+                      }
                 />
                 <Match
                     exactly

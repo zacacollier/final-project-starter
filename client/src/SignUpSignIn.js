@@ -1,13 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { Tabs, Tab, Row, Col, Alert } from 'react-bootstrap';
 import SignUp from './SignUp';
-import SignIn from './SignIn'
+import SignIn from './SignIn';
+import Modal from 'react-modal';
+
 class SignUpSignIn extends Component {
 
-    handleAlertClick = (event) => {
-        event.preventDefault();
-        this.props.onAlertClick(event);
-    }
+  handleAlertClick = (event) => {
+      event.preventDefault();
+      this.props.onAlertClick(event);
+  }
+
   renderError() {
     return (
       <Alert onClick={this.handleAlertClick} bsStyle="danger">
@@ -20,7 +23,7 @@ class SignUpSignIn extends Component {
     return (
       <Row>
         <Col xs={8} xsOffset={2}>
-          {this.props.error && this.renderError()}
+        {this.props.error && this.renderError()}
           <Tabs defaultActiveKey={1} id="signup-signin-tabs">
             <Tab eventKey={1} title="Sign Up">
               <SignUp onSignUp={this.props.onSignUp}/>

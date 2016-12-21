@@ -8,7 +8,8 @@ export default class GitHubSearchBar extends Component {
 
     this.state = {
       value: '',
-      results: []
+      results: [],
+      open: false
     }
   }
 
@@ -28,7 +29,8 @@ export default class GitHubSearchBar extends Component {
       .then(res => {
         if (res.statusCode !== 404) {
           this.setState({
-            results: [res.data]
+            results: [res.data],
+            open: true
           })
         }
       }
@@ -38,7 +40,7 @@ export default class GitHubSearchBar extends Component {
 
   renderSuggestion() {
     return(
-      <Suggestion results={this.state.results} />
+      <Suggestion open={this.state.open} results={this.state.results} />
     )
   }
 
