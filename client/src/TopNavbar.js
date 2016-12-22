@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { FaGithub } from 'react-icons/lib/fa';
 import { Link } from 'react-router';
 
 const TopNavbar = (props) => {
@@ -7,7 +8,7 @@ const TopNavbar = (props) => {
     <Navbar inverse collapseOnSelect>
       <Navbar.Header>
         <Navbar.Brand>
-          <Link to="/">Auth App</Link>
+          <Link to="/"><strong>Find Friends on <FaGithub /></strong></Link>
         </Navbar.Brand>
         { props.showNavItems ? <Navbar.Toggle /> : null }
       </Navbar.Header>
