@@ -8,6 +8,10 @@ import JobName from './JobName.js';
 // TODO: map lists from state onto all of SplitButton's dropdown MenuItems
 
 export default class Suggestion extends Component {
+  handleSuggestionClick = (event) => {
+    event.preventDefault();
+    this.props.onSuggestionSelect(event, this.props)
+  }
   render() {
     return(
       <div>
@@ -48,10 +52,12 @@ export default class Suggestion extends Component {
                                 title={'Add to '}
                                 bsSize={'large'}
                                 key={result.id}
+                                id={result.id}
                                 type="submit"
+                                onClick={this.handleSuggestionClick}
                               >
                                 <MenuItem
-                                  onClick={this.props.onClick}
+                                  onClick={this.handleSuggestionClick}
                                   id={result.id}
                                   bsSize={'large'}
                                   eventKey={this.props.results[result]}

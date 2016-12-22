@@ -119,9 +119,9 @@ export default class App extends Component {
   handleGithubSearchSubmit = (event, res) => {
     if (event) { this.setState({ githubSearchStatus: 'error' }) }
   }
-  handleSuggestionSubmit = (event) => {
+  handleSuggestionSubmit = (event, props) => {
     event.preventDefault();
-    console.log(console.log(event))
+    console.log(console.log(event, props))
   }
     renderApp() {
         return (

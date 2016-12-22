@@ -56,7 +56,10 @@ export default class GitHubSearchBar extends Component {
         this.props.onSubmit(err);
       })
   }
-
+  handleSuggestionSelect = (event, props) => {
+    event.preventDefault();
+    this.props.onSuggestionSubmit(event, props)
+  }
   handleCloseSuggestion = (event) => {
     this.setState({ open: false });
   }
@@ -67,15 +70,10 @@ export default class GitHubSearchBar extends Component {
         results={this.state.results}
         onClick={this.handleCloseSuggestion}
         onSuggestionSubmit={this.props.onSuggestionSubmit}
+        onSuggestionSelect={this.handleSuggestionSelect}
        />
     )
   }
-  renderGlyph = () => {
-    return (
-      <Glyphicon glyph="search" />
-    )
-  }
-
   render() {
     return (
       <div>
