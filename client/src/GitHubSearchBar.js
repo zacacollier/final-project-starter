@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Suggestion from './Suggestion.js'
+import {
+  FormGroup,
+  InputGroup,
+  FormControl,
+  Glyphicon,
+  Button
+  } from 'react-bootstrap';
 
 export default class GitHubSearchBar extends Component {
   constructor (props) {
@@ -9,6 +16,7 @@ export default class GitHubSearchBar extends Component {
     this.state = {
       value: '',
       results: [],
+      validation: '',
       open: false
     }
   }
@@ -38,19 +46,37 @@ export default class GitHubSearchBar extends Component {
       .catch(err => console.log(err))
   }
 
-  renderSuggestion() {
-    return(
+  renderSuggestion = () => {
+    return (
       <Suggestion open={this.state.open} results={this.state.results} />
+    )
+  }
+  renderGlyph = () => {
+    return (
+      <Glyphicon glyph="search" />
     )
   }
 
   render() {
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" onChange={this.handleChange} />
-          <input type="submit" value="Submit" />
-        </form>
+        <FormGroup onSubmit={this.handleSubmit}>
+          <InputGroup>
+            <FormControl
+              type="text"
+              value={this.state.value}
+              placeholder="Search"
+              bsSize="large"
+              onChange={this.handleChange}
+              validationState={this.state.validation}
+            />
+            <InputGroup.Button>
+              <Button type="submit">
+                <Glyphicon glyph="search" />
+              </Button>
+            </InputGroup.Button>
+          </InputGroup>
+        </FormGroup>
         { this.state.results && this.renderSuggestion() }
       </div>
     );
