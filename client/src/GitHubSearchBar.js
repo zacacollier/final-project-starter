@@ -9,7 +9,7 @@ import {
   Glyphicon,
   Button
   } from 'react-bootstrap';
-
+//TODO: fix set timeout so it doesn't trigger the name generator
 export default class GitHubSearchBar extends Component {
   constructor (props) {
     super(props)
@@ -18,7 +18,9 @@ export default class GitHubSearchBar extends Component {
       value: '',
       results: [],
       validation: null,
-      open: false
+      open: false,
+      repos_url: '',
+      repos: null
     }
   }
 
@@ -47,10 +49,17 @@ export default class GitHubSearchBar extends Component {
           this.setState({
             value: '',
             results: [res.data],
+            repos_url: res.data.repos_url,
             open: true
           })
       }
       )
+      .then(() => {
+        let getRepos = this.state.repos_url;
+        axios.get(getRepos)
+        .then(res => this.setState({ repos: res.data }))
+        .catch(err => console.error(err))
+      })
       .catch(err => {
         this.setState({ validation: 'error' })
         this.props.onSubmit(err);

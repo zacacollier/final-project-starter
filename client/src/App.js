@@ -19,19 +19,24 @@ export default class App extends Component {
             githubSearchStatus: '',
             signInSuccess: false,
             authenticated: localStorage.getItem('token'),
+            userID: [],
+            username: '',
             lists: []
         }
     }
-// Fetch User Lists from Mongo API
+// Fetch User Profile and Lists from Mongo API
     componentWillMount = () => {
-      const URL = '/api/lists';
-      axios.get(URL, {
+      axios.get('/api/lists', {
         headers: {
           authorization: localStorage.getItem('token')
         }
       })
-      .then((res) => this.setState({ lists: [res.data] }))
-      .catch(err => console.log(`Axios - could not GET from ${URL}: ${err}`))
+      .then((res) => this.setState({
+        lists: [res.data],
+        userID: res.data._id,
+        username: res.data.title
+      }))
+      .catch(err => console.error(`Axios - could not GET from ${URL}: ${err}`))
     }
 
     handleSignUp = (credentials) => {
@@ -121,7 +126,22 @@ export default class App extends Component {
   }
   handleSuggestionSubmit = (event, props) => {
     event.preventDefault();
-    console.log(console.log(event, props))
+    const { results } = props;
+    axios.post('/api/lists', {
+      headers: {
+        authorization: localStorage.getItem('token')
+      },
+      data: {
+      username: results.login,
+      realname: results.name,
+      avatar: results.avatar_url,
+      githubID: results.id,
+      repos: results.repos_url,
+      user: this.state.userId,
+      }
+    })
+    .then(res => this.setState({ lists: [res.data] }))
+    .catch(err => console.error(`Axios - could not POST to 'lists': ${err}`))
   }
     renderApp() {
         return (

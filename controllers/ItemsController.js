@@ -22,9 +22,9 @@ module.exports = {
       return new ItemModel({
         username: req.body.login,
         realname: req.body.name,
-        avatar: req.body.avatar,
+        avatar: req.body.avatar_url,
         githubID: req.body.id,
-        repos: req.body.public_repos,
+        repos: req.body.repos_url,
         user: userId,
         list: listId,
       }).save();

@@ -10,7 +10,14 @@ import JobName from './JobName.js';
 export default class Suggestion extends Component {
   handleSuggestionClick = (event) => {
     event.preventDefault();
-    this.props.onSuggestionSelect(event, this.props)
+    this.props.onSuggestionSelect(event, this.props);
+  }
+  renderGenerateJob = () => {
+      return(
+        <div>
+          <JobName /> at <BusinessName />
+        </div>
+      )
   }
   render() {
     return(
@@ -30,10 +37,12 @@ export default class Suggestion extends Component {
                             <Col xs={8}>
                               <Well>
                                 <h1>{result.name}</h1>
-                                <h4><JobName /> at <BusinessName /></h4>
+                                <h4>
+                                { result.company ? result.company : this.renderGenerateJob()}
+                                </h4>
                                 <span>
                                   <FaGithub />
-                                  <a href={result.url}>
+                                  <a href={result.html_url}>
                                     {result.login}
                                   </a>
                                 </span>
