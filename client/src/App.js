@@ -16,12 +16,13 @@ export default class App extends Component {
 
         this.state = {
             signUpSignInError: '',
+            githubSearchStatus: '',
             signInSuccess: false,
             authenticated: localStorage.getItem('token'),
             lists: []
         }
     }
-
+// Fetch User Lists from Mongo API
     componentWillMount = () => {
       const URL = '/api/lists';
       axios.get(URL, {
@@ -115,7 +116,13 @@ export default class App extends Component {
             />
     );
 }
-
+  handleGithubSearchSubmit = (event, res) => {
+    if (event) { this.setState({ githubSearchStatus: 'error' }) }
+  }
+  handleSuggestionSubmit = (event) => {
+    event.preventDefault();
+    console.log(console.log(event))
+  }
     renderApp() {
         return (
             <div>
@@ -141,7 +148,11 @@ export default class App extends Component {
                               <strong>Logged In Successfully!</strong>
                             </Alert>
                           </Modal>
-                          <GitHubSearchBar />
+                          <GitHubSearchBar
+                            onSubmit={this.handleGithubSearchSubmit}
+                            onSuggestionSubmit={this.handleSuggestionSubmit}
+                            validationState={this.state.githubSearchStatus}
+                          />
                         </div>
                       )}
                       }

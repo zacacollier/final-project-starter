@@ -5,6 +5,7 @@ import {
   FormGroup,
   InputGroup,
   FormControl,
+  HelpBlock,
   Glyphicon,
   Button
   } from 'react-bootstrap';
@@ -16,7 +17,7 @@ export default class GitHubSearchBar extends Component {
     this.state = {
       value: '',
       results: [],
-      validation: '',
+      validation: null,
       open: false
     }
   }
@@ -25,30 +26,48 @@ export default class GitHubSearchBar extends Component {
     event.preventDefault();
     const { value } = event.target
     this.setState({
+      validation: null,
       value: value
     })
     console.log(this.state.value)
   }
 
+  handleClick = (event) => {
+    event.preventDefault();
+    this.state.validation === 'error' ? this.setState({ validation: '' }) : null
+  }
+  handleCloseSuggestion = (event) => {
+    this.setState({ open: false });
+  }
   handleSubmit = (event) => {
     const URL = `https://api.github.com/users/${this.state.value}`;
     event.preventDefault();
     axios.get(URL)
       .then(res => {
-        if (res.statusCode !== 404) {
           this.setState({
+            value: '',
             results: [res.data],
             open: true
           })
-        }
       }
       )
-      .catch(err => console.log(err))
+      .catch(err => {
+        this.setState({ validation: 'error' })
+        this.props.onSubmit(err);
+      })
   }
 
+  handleCloseSuggestion = (event) => {
+    this.setState({ open: false });
+  }
   renderSuggestion = () => {
     return (
-      <Suggestion open={this.state.open} results={this.state.results} />
+      <Suggestion
+        open={this.state.open}
+        results={this.state.results}
+        onClick={this.handleCloseSuggestion}
+        onSuggestionSubmit={this.props.onSuggestionSubmit}
+       />
     )
   }
   renderGlyph = () => {
@@ -60,24 +79,36 @@ export default class GitHubSearchBar extends Component {
   render() {
     return (
       <div>
-        <FormGroup onSubmit={this.handleSubmit}>
-          <InputGroup>
-            <FormControl
-              type="text"
-              value={this.state.value}
-              placeholder="Search"
-              bsSize="large"
-              onChange={this.handleChange}
-              validationState={this.state.validation}
-            />
-            <InputGroup.Button>
-              <Button type="submit">
-                <Glyphicon glyph="search" />
-              </Button>
-            </InputGroup.Button>
-          </InputGroup>
-        </FormGroup>
-        { this.state.results && this.renderSuggestion() }
+        <form onSubmit={this.handleSubmit}>
+          <FormGroup
+            role="form"
+            validationState={this.state.validation}
+          >
+            <InputGroup>
+              <FormControl
+                type="text"
+                value={this.state.value}
+                placeholder="Search"
+                bsSize="large"
+                onChange={this.handleChange}
+                onClick={this.handleClick}
+              />
+              <FormControl.Feedback />
+              <InputGroup.Button>
+                <Button
+                  bsStyle={
+                    this.state.validation === 'error' ? 'danger' : null}
+                  type="submit"
+                >
+                  <Glyphicon glyph="search" />
+                </Button>
+              </InputGroup.Button>
+            </InputGroup>
+            <HelpBlock>{this.state.validation === 'error' ? "This is not the user you're looking for..." : null}
+            </HelpBlock>
+          </FormGroup>
+        </form>
+        { this.state.open && this.renderSuggestion() }
       </div>
     );
   }
