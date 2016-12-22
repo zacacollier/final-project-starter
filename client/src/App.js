@@ -154,12 +154,6 @@ export default class App extends Component {
                         <div>
                           <Modal
                             isOpen={this.state.signInSuccess}
-                            onAfterOpen={setTimeout(() => {
-                              this.setState({
-                              signInSuccess: false
-                              })
-                            }, 4000)
-                            }
                             onRequestClose={this.props.onRequestClose}
                             closeTimeoutMS={3000}
                             contentLabel="Modal"

@@ -3,11 +3,13 @@ import axios from 'axios';
 import _ from 'lodash';
 import Suggestion from './Suggestion.js'
 import {
+  Row,
   FormGroup,
   InputGroup,
   FormControl,
   HelpBlock,
   Glyphicon,
+  Badge,
   Button
   } from 'react-bootstrap';
 //TODO: fix set timeout so it doesn't trigger the name generator
@@ -89,15 +91,28 @@ export default class GitHubSearchBar extends Component {
   handleCloseSuggestion = (event) => {
     this.setState({ open: false });
   }
+  renderLanguages = () => {
+    return this.state.languages.map((each) => {
+      (
+        <div>
+          <Badge>{each}</Badge>
+        </div>
+      )
+    })
+  }
   renderSuggestion = () => {
     return (
-      <Suggestion
+      <div>
+        <Suggestion
+        languages={this.state.languages}
         open={this.state.open}
         results={this.state.results}
         onClick={this.handleCloseSuggestion}
         onSuggestionSubmit={this.props.onSuggestionSubmit}
         onSuggestionSelect={this.handleSuggestionSelect}
-       />
+       >
+       </Suggestion>
+      </div>
     )
   }
   render() {
@@ -132,7 +147,7 @@ export default class GitHubSearchBar extends Component {
             </HelpBlock>
           </FormGroup>
         </form>
-        { this.state.open && this.renderSuggestion() }
+        { this.state.languages && this.renderSuggestion() }
       </div>
     );
   }

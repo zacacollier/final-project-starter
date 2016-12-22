@@ -8,6 +8,17 @@ import JobName from './JobName.js';
 // TODO: map lists from state onto all of SplitButton's dropdown MenuItems
 
 export default class Suggestion extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      languages: []
+    }
+  }
+  componentDidMount = () => {
+    if (this.props.languages !== null) {
+    this.setState({ languages: this.props.languages }, () => this.renderLanguages(this.props.languages))
+    }
+  }
   handleSuggestionClick = (event) => {
     event.preventDefault();
     this.props.onSuggestionSelect(event, this.props);
@@ -18,6 +29,31 @@ export default class Suggestion extends Component {
           <JobName /> at <BusinessName />
         </div>
       )
+  }
+  renderLanguageLists = () => {
+    const { languages } = this.props
+    if (this.state.languages.length > 0) {
+      return this.state.languages.map((each) => {
+        return (
+          <MenuItem
+            onClick={this.handleSuggestionClick}
+            bsSize={'large'}
+            type="submit"
+          >
+            {each[0]}
+            <Badge pullRight>{each[1]}</Badge>
+          </MenuItem>
+        )
+      })
+    }
+  }
+  renderLanguages = () => {
+    const { languages } = this.props
+    return languages.map((each) => {
+      (
+        <Badge>{each}</Badge>
+      )
+    })
   }
   render() {
     return(
@@ -65,14 +101,7 @@ export default class Suggestion extends Component {
                                 type="submit"
                                 onClick={this.handleSuggestionClick}
                               >
-                                <MenuItem
-                                  onClick={this.handleSuggestionClick}
-                                  id={result.id}
-                                  bsSize={'large'}
-                                  eventKey={this.props.results[result]}
-                                  type="submit"
-                                >...
-                                </MenuItem>
+                                {this.renderLanguageLists()}
                               </DropdownButton>
                               <br />
                                 <Button
