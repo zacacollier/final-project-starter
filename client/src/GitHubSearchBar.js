@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import Suggestion from './Suggestion.js'
 import {
   FormGroup,
@@ -20,7 +21,7 @@ export default class GitHubSearchBar extends Component {
       validation: null,
       open: false,
       repos_url: '',
-      repos: null
+      languages: null
     }
   }
 
@@ -57,13 +58,29 @@ export default class GitHubSearchBar extends Component {
       .then(() => {
         let getRepos = this.state.repos_url;
         axios.get(getRepos)
-        .then(res => this.setState({ repos: res.data }))
+        .then(res => this.handleFilterLanguageData(res.data))
         .catch(err => console.error(err))
       })
       .catch(err => {
         this.setState({ validation: 'error' })
         this.props.onSubmit(err);
       })
+  }
+  // filters messy incoming data from GitHub
+  handleFilterLanguageData = (repos) => {
+    const languages = repos.reduce((acc, prev) => {
+      return acc.concat(prev.language).sort()
+    }, []);
+    let count = languages.map((lang) => {
+      return _.countBy(languages, lang)
+    })
+    let sort = count.map((each) => {
+      return Object.entries(each).filter((n) => !n.includes("undefined"))
+    })
+    let filter = _.flatten(sort.filter((x) => x.length > 1 )).filter((y) => !y.includes("null"))
+    this.setState({
+      languages: filter
+    })
   }
   handleSuggestionSelect = (event, props) => {
     event.preventDefault();
