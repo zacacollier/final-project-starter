@@ -3,7 +3,6 @@ import { BrowserRouter, Match, Miss } from 'react-router';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { Alert } from 'react-bootstrap';
-import ReactTimeout from 'react-timeout';
 import SignUpSignIn from './SignUpSignIn';
 import TopNavbar from './TopNavbar';
 import GitHubSearchBar from './GitHubSearchBar.js';
@@ -12,14 +11,26 @@ import './App.css';
 
 
 export default class App extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         this.state = {
             signUpSignInError: '',
             signInSuccess: false,
-            authenticated: localStorage.getItem('token')
+            authenticated: localStorage.getItem('token'),
+            lists: []
         }
+    }
+
+    componentWillMount = () => {
+      const URL = '/api/lists';
+      axios.get(URL, {
+        headers: {
+          authorization: localStorage.getItem('token')
+        }
+      })
+      .then((res) => this.setState({ lists: [res.data] }))
+      .catch(err => console.log(`Axios - could not GET from ${URL}: ${err}`))
     }
 
     handleSignUp = (credentials) => {
@@ -53,7 +64,6 @@ export default class App extends Component {
     }
 
     handleSignIn = (credentials) => {
-      //TODO: add a nice spinner to verify auth success
         const { username, password } = credentials
         if (!username.trim() || !password.trim()) {
             this.setState({

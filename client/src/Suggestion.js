@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FaGithub, FaClose} from 'react-icons/lib/fa';
-import { Col, Row, FormGroup, FormControl, ListGroup, ListGroupItem, Image, Fade, Well, SplitButton, Button, MenuItem } from 'react-bootstrap';
+import { Col, Row,  ListGroup, Image, Fade, Well, SplitButton, Button, MenuItem } from 'react-bootstrap';
 
 // TODO: map lists from state onto all of SplitButton's dropdown MenuItems
 

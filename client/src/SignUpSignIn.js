@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Tabs, Tab, Row, Col, Alert } from 'react-bootstrap';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
-import Modal from 'react-modal';
 
 class SignUpSignIn extends Component {
 

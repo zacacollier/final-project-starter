@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import Suggestion from './Suggestion.js'
 
@@ -45,11 +45,6 @@ export default class GitHubSearchBar extends Component {
   }
 
   render() {
-    const inputProps = {
-      placeholder: 'Search for a Github username...',
-      value: this.state.value,
-      onChange: this.onChange
-    };
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -61,3 +56,4 @@ export default class GitHubSearchBar extends Component {
     );
   }
 }
+
