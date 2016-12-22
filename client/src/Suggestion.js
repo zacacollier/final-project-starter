@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { FaGithub, FaClose} from 'react-icons/lib/fa';
-import { Col, Row,  ListGroup, Image, Fade, Well, SplitButton, Button, MenuItem } from 'react-bootstrap';
+import { FaGithub, FaClose } from 'react-icons/lib/fa';
+import { GoRepo } from 'react-icons/lib/go';
+import { Col, Row,  ListGroup, Image, Fade, Well, SplitButton, Button, MenuItem, Badge } from 'react-bootstrap';
+import BusinessName from './BusinessName.js';
+import JobName from './JobName.js';
 
 // TODO: map lists from state onto all of SplitButton's dropdown MenuItems
 
@@ -22,10 +25,20 @@ export default class Suggestion extends Component {
                           <Col xs={8}>
                             <Well>
                               <h1>{result.name}</h1>
+                              <h4><JobName /> at <BusinessName /></h4>
                               <span>
                                 <FaGithub />
                                 <a href={result.url}>
                                   {result.login}
+                                </a>
+                              </span>
+                              <br />
+                              <span>
+                                <a href={result.repos_url}>
+                                  <GoRepo />
+                                  <Badge>
+                                    {result.public_repos}
+                                  </Badge>
                                 </a>
                               </span>
                             </Well>
