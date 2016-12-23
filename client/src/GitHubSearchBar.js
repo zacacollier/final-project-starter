@@ -82,6 +82,8 @@ export default class GitHubSearchBar extends Component {
     let filter = _.flatten(sort.filter((x) => x.length > 1 )).filter((y) => !y.includes("null"))
     this.setState({
       languages: filter
+    }, () => {
+      this.props.passLanguages(this.state.languages)
     })
   }
   handleSuggestionSelect = (event, props) => {
@@ -105,9 +107,11 @@ export default class GitHubSearchBar extends Component {
       <div>
         <Suggestion
         languages={this.state.languages}
+        passLanguages={this.props.passLanguages}
         open={this.state.open}
         results={this.state.results}
         onClick={this.handleCloseSuggestion}
+        onDropdownItemClick={this.props.onDropdownItemClick}
         onSuggestionSubmit={this.props.onSuggestionSubmit}
         onSuggestionSelect={this.handleSuggestionSelect}
        >

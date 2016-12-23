@@ -21,7 +21,8 @@ export default class App extends Component {
             authenticated: localStorage.getItem('token'),
             userID: [],
             username: '',
-            lists: []
+            lists: [],
+            languages: []
         }
     }
 // Fetch User Profile and Lists from Mongo API
@@ -37,6 +38,10 @@ export default class App extends Component {
         username: res.data.title
       }))
       .catch(err => console.error(`Axios - could not GET from ${URL}: ${err}`))
+    }
+
+    mapLanguagesToState = (languages) => {
+      this.setState({ languages: languages })
     }
 
     handleSignUp = (credentials) => {
@@ -124,24 +129,37 @@ export default class App extends Component {
   handleGithubSearchSubmit = (event, res) => {
     if (event) { this.setState({ githubSearchStatus: 'error' }) }
   }
-  handleSuggestionSubmit = (event, props) => {
-    event.preventDefault();
-    const { results } = props;
+
+  handleDropdownItemClick = (result, language) => {
+    console.log(result, language)
     axios.post('/api/lists', {
-      headers: {
+        username: result.login,
+        realname: result.name,
+        avatar: result.avatar_url,
+        githubID: result.id,
+        repos: result.repos_url,
+        user: this.state.userId,
+    },
+      { headers: {
         authorization: localStorage.getItem('token')
       },
-      data: {
-      username: results.login,
-      realname: results.name,
-      avatar: results.avatar_url,
-      githubID: results.id,
-      repos: results.repos_url,
-      user: this.state.userId,
-      }
-    })
+    }
+    )
     .then(res => this.setState({ lists: [res.data] }))
     .catch(err => console.error(`Axios - could not POST to 'lists': ${err}`))
+  }
+  renderSearchBar = () => {
+    if (!this.state.signInSuccess) {
+    return(
+      <GitHubSearchBar
+        passLanguages={this.mapLanguagesToState}
+        onSubmit={this.handleGithubSearchSubmit}
+                            onSuggestionSubmit={this.handleSuggestionSubmit}
+                            onDropdownItemClick={this.handleDropdownItemClick}
+                            validationState={this.state.githubSearchStatus}
+                          />
+    )
+    }
   }
     renderApp() {
         return (
@@ -157,16 +175,18 @@ export default class App extends Component {
                             onRequestClose={this.props.onRequestClose}
                             closeTimeoutMS={3000}
                             contentLabel="Modal"
+                            onAfterOpen={setTimeout(() => {
+                              this.setState({
+                              signInSuccess: false
+                              })
+                            }, 4000)
+                            }
                           >
                             <Alert onClick={this.handleAlertClick} bsStyle="success">
                               <strong>Logged In Successfully!</strong>
                             </Alert>
                           </Modal>
-                          <GitHubSearchBar
-                            onSubmit={this.handleGithubSearchSubmit}
-                            onSuggestionSubmit={this.handleSuggestionSubmit}
-                            validationState={this.state.githubSearchStatus}
-                          />
+                          { this.renderSearchBar() }
                         </div>
                       )}
                       }
