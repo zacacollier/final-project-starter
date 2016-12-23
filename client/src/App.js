@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Match, Miss } from 'react-router';
 import axios from 'axios';
 import Modal from 'react-modal';
+import _ from 'lodash';
 import { Alert } from 'react-bootstrap';
 import SignUpSignIn from './SignUpSignIn';
 import TopNavbar from './TopNavbar';
@@ -131,23 +132,57 @@ export default class App extends Component {
   }
 
   handleDropdownItemClick = (result, language) => {
-    console.log(result, language)
-    axios.post('/api/lists', {
-        username: result.login,
-        realname: result.name,
-        avatar: result.avatar_url,
-        githubID: result.id,
-        repos: result.repos_url,
-        user: this.state.userId,
-    },
-      { headers: {
-        authorization: localStorage.getItem('token')
-      },
+//    console.log(result, language)
+//    .then((res, result) => {
+      let targetList = this.state.lists.filter((list) => {
+        return _.includes(this.state.lists, result.title)
+      })
+      if (_.includes(...this.state.lists, result.title)) {
+        axios.post('/api/items',  {
+            username: result.login,
+            realname: result.name,
+            avatar: result.avatar_url,
+            githubID: result.id,
+            repos: result.repos_url,
+            user: this.state.userId,
+            list: targetList
+          },
+          { headers: {
+              authorization: localStorage.getItem('token')
+            },
+          })
+        .then(res => console.log(res))
+        .catch(err => console.error(`${err}`))
+        }
+      else {
+        axios.post('/api/lists', {
+          title: language,
+          user: this.state.userID,
+        },
+          { headers: {
+            authorization: localStorage.getItem('token')
+          },
+        })
+        .then((res, result) => {
+          axios.post('/api/items',  {
+              username: result.login,
+              realname: result.name,
+              avatar: result.avatar_url,
+              githubID: result.id,
+              repos: result.repos_url,
+              user: this.state.userId,
+              list: targetList
+            },
+            { headers: {
+                authorization: localStorage.getItem('token')
+              },
+            })
+            .then(res => this.setState({ lists: res.data }))
+            .catch(err => console.error(`err`))
+        })
+        .catch(err => console.error('err'))
+        }
     }
-    )
-    .then(res => this.setState({ lists: [res.data] }))
-    .catch(err => console.error(`Axios - could not POST to 'lists': ${err}`))
-  }
   renderSearchBar = () => {
     if (!this.state.signInSuccess) {
     return(

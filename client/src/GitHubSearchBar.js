@@ -3,7 +3,6 @@ import axios from 'axios';
 import _ from 'lodash';
 import Suggestion from './Suggestion.js'
 import {
-  Row,
   FormGroup,
   InputGroup,
   FormControl,
