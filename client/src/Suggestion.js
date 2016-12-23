@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { FaGithub, FaClose } from 'react-icons/lib/fa';
+import { FaGithub, FaClose, FaGenderless } from 'react-icons/lib/fa';
 import { GoRepo } from 'react-icons/lib/go';
-import { Col, Row,  ListGroup, Image, Fade, Well, DropdownButton, Button, MenuItem, Badge } from 'react-bootstrap';
+import { Col, Row,  ListGroup, ListGroupItem, Image, Fade, Well, DropdownButton, Button, MenuItem, Badge } from 'react-bootstrap';
 import BusinessName from './BusinessName.js';
 import JobName from './JobName.js';
 
@@ -31,29 +31,31 @@ export default class Suggestion extends Component {
       )
   }
   renderLanguageLists = () => {
-    const { languages } = this.props
     if (this.state.languages.length > 0) {
       return this.state.languages.map((each) => {
         return (
-          <MenuItem
+          <ListGroupItem>
+            <Badge pullRight>{each[0]} <FaGenderless /> {each[1]}</Badge>
+          </ListGroupItem>
+      )
+    })
+  }
+}
+renderLanguages = () => {
+    if (this.state.languages.length > 0) {
+      return this.state.languages.map((each) => {
+        return (
+          <ListGroupItem
             onClick={this.handleSuggestionClick}
             bsSize={'large'}
             type="submit"
           >
             {each[0]}
             <Badge pullRight>{each[1]}</Badge>
-          </MenuItem>
+          </ListGroupItem>
         )
       })
     }
-  }
-  renderLanguages = () => {
-    const { languages } = this.props
-    return languages.map((each) => {
-      (
-        <Badge>{each}</Badge>
-      )
-    })
   }
   render() {
     return(
@@ -91,6 +93,9 @@ export default class Suggestion extends Component {
                                     </Badge>
                                   </a>
                                 </span>
+                                <ListGroup>
+                                { this.renderLanguages() }
+                                </ListGroup>
                               </Well>
                               <DropdownButton
                                 bsStyle={'info'}
