@@ -20,13 +20,13 @@ module.exports = {
       }
       foundList = list;
       return new ItemModel({
-        username: req.body.login,
-        realname: req.body.name,
-        avatar: req.body.avatar_url,
-        githubID: req.body.id,
-        repos: req.body.repos_url,
-        user: userId,
+        avatar: req.body.avatar,
+        githubID: req.body.githubID,
         list: listId,
+        realname: req.body.realname,
+        repos: req.body.repos,
+        user: userId,
+        username: req.body.username,
       }).save();
     })
       .then(item => {

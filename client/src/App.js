@@ -27,6 +27,7 @@ export default class App extends Component {
         }
     }
 // Fetch User Profile and Lists from Mongo API
+  //TODO: and load in userID from API
     componentWillMount = () => {
       axios.get('/api/lists', {
         headers: {
@@ -35,8 +36,7 @@ export default class App extends Component {
       })
       .then((res) => this.setState({
         lists: [res.data],
-        userID: res.data._id,
-        username: res.data.title
+        userID: res.data[0].user,
       }))
       .catch(err => console.error(`Axios - could not GET from ${URL}: ${err}`))
     }
@@ -134,10 +134,9 @@ export default class App extends Component {
   handleDropdownItemClick = (result, language) => {
     let flatResult = _.flatten(result)[0]
     let { lists } = this.state
-    console.log(flatResult, language, this.state.lists)
-    let targetList = lists[0].filter(list => list ? list.title === language : [])
-    //TODO: if (!!targetList.length) { update targetList[items] } else create new list
-    if (!targetList.length) {
+    let targetList = lists[0].filter(list => list ? list.title === language : [])[0]
+    console.log(flatResult, language, targetList)
+    if (!targetList.title) {
       console.log('no list no list no list')
       axios.post('/api/lists', {
         title: language,
@@ -148,46 +147,26 @@ export default class App extends Component {
         },
       })
       .then(res => this.setState({ lists: res.data }))
-     // .then((res, result) => {
-     //   axios.post('/api/items',  {
-     //       username: result.login,
-     //       realname: result.name,
-     //       avatar: result.avatar_url,
-     //       githubID: result.id,
-     //       repos: result.repos_url,
-     //       user: this.state.userId,
-     //       list: targetList
-     //     },
-     //     { headers: {
-     //         authorization: localStorage.getItem('token')
-     //       },
-     //     })
-     //     .then(res => {
-     //       let { items } = targetList;
-     //       this.setState({ items: res.data })
-     //     })
-     //     .catch(err => console.error(`${err}`))
-     // })
       .catch(err => console.error(`${err}`))
-   // if (!!targetList.length) {
-   //   console.log('if')
-   //   axios.post('/api/items',  {
-   //       username: result.login,
-   //       realname: result.name,
-   //       avatar: result.avatar_url,
-   //       githubID: result.id,
-   //       repos: result.repos_url,
-   //       user: this.state.userId,
-   //       list: targetList
-   //     },
-   //     { headers: {
-   //         authorization: localStorage.getItem('token')
-   //       },
-   //     })
-   //   .then(res => console.log(res))
-   //   .catch(err => console.error(`${err}`))
-   //   }
       }
+    axios.post('/api/items',  {
+        username: flatResult.login,
+        realname: flatResult.name,
+        avatar: flatResult.avatar_url,
+        githubID: flatResult.id,
+        repos: flatResult.public_repos,
+        user: this.state.userID,
+        list: targetList._id
+          },
+      { headers: {
+          authorization: localStorage.getItem('token')
+        },
+      })
+      .then(res => {
+        let { items } = targetList;
+        this.setState({ items: res.data })
+      })
+      .catch(err => console.error(`${err}`))
   }
   renderSearchBar = () => {
     if (!this.state.signInSuccess) {
