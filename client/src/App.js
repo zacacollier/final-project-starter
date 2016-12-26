@@ -132,34 +132,13 @@ export default class App extends Component {
   }
 
   handleDropdownItemClick = (result, language) => {
-    console.log(_.flatten(result), language, ...this.state.lists)
-    let targetList = Object.entries(...this.state.lists).filter(each => each.hasOwnProperty(language))
-   // let targetList = this.state.lists.filter((list) => {
-   //   return _.includes(this.state.lists, language)
-   // })
-    console.log(targetList)
-    let hasTitle = _.flatten(Object.entries(targetList).filter(each => each.includes('title'))).includes(language)
-    console.log(hasTitle)
-    if (hasTitle) {
-      console.log('if')
-      axios.post('/api/items',  {
-          username: result.login,
-          realname: result.name,
-          avatar: result.avatar_url,
-          githubID: result.id,
-          repos: result.repos_url,
-          user: this.state.userId,
-          list: targetList
-        },
-        { headers: {
-            authorization: localStorage.getItem('token')
-          },
-        })
-      .then(res => console.log(res))
-      .catch(err => console.error(`${err}`))
-      }
-    else {
-      console.log('else')
+    let flatResult = _.flatten(result)[0]
+    let { lists } = this.state
+    console.log(flatResult, language, this.state.lists)
+    let targetList = lists[0].filter(list => list ? list.title === language : [])
+    //TODO: if (!!targetList.length) { update targetList[items] } else create new list
+    if (!targetList.length) {
+      console.log('no list no list no list')
       axios.post('/api/lists', {
         title: language,
         user: this.state.userID,
@@ -168,28 +147,47 @@ export default class App extends Component {
           authorization: localStorage.getItem('token')
         },
       })
-      .then((res, result) => {
-        axios.post('/api/items',  {
-            username: result.login,
-            realname: result.name,
-            avatar: result.avatar_url,
-            githubID: result.id,
-            repos: result.repos_url,
-            user: this.state.userId,
-            list: targetList
-          },
-          { headers: {
-              authorization: localStorage.getItem('token')
-            },
-          })
-          .then(res => {
-            let { items } = targetList;
-            this.setState({ items: res.data })
-          })
-          .catch(err => console.error(`${err}`))
-      })
+      .then(res => this.setState({ lists: res.data }))
+     // .then((res, result) => {
+     //   axios.post('/api/items',  {
+     //       username: result.login,
+     //       realname: result.name,
+     //       avatar: result.avatar_url,
+     //       githubID: result.id,
+     //       repos: result.repos_url,
+     //       user: this.state.userId,
+     //       list: targetList
+     //     },
+     //     { headers: {
+     //         authorization: localStorage.getItem('token')
+     //       },
+     //     })
+     //     .then(res => {
+     //       let { items } = targetList;
+     //       this.setState({ items: res.data })
+     //     })
+     //     .catch(err => console.error(`${err}`))
+     // })
       .catch(err => console.error(`${err}`))
-    }
+   // if (!!targetList.length) {
+   //   console.log('if')
+   //   axios.post('/api/items',  {
+   //       username: result.login,
+   //       realname: result.name,
+   //       avatar: result.avatar_url,
+   //       githubID: result.id,
+   //       repos: result.repos_url,
+   //       user: this.state.userId,
+   //       list: targetList
+   //     },
+   //     { headers: {
+   //         authorization: localStorage.getItem('token')
+   //       },
+   //     })
+   //   .then(res => console.log(res))
+   //   .catch(err => console.error(`${err}`))
+   //   }
+      }
   }
   renderSearchBar = () => {
     if (!this.state.signInSuccess) {
