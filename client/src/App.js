@@ -163,8 +163,17 @@ export default class App extends Component {
         },
       })
       .then(res => {
-        let { items } = targetList;
-        this.setState({ items: res.data })
+        console.log(res)
+        axios.post(`/api/lists/${res.data.list}`, {
+          items: res.data
+        },
+          { headers: {
+            authorization: localStorage.getItem('token')
+          },
+        })
+      .then(res => console.log(res))
+       // let { items } = targetList;
+       // this.setState({ items: res.data })
       })
       .catch(err => console.error(`${err}`))
   }

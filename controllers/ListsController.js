@@ -37,7 +37,9 @@ module.exports = {
       _id: req.params.id,
     },
       {
-        $set: { title: req.body.title }
+        $set: {
+          items: req.body.items
+        }
       },
       { new: true }
     )
