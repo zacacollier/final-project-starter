@@ -22,12 +22,10 @@ export default class App extends Component {
             authenticated: localStorage.getItem('token'),
             userID: [],
             username: '',
-            lists: [],
-            languages: []
+            lists: null,
+            languages: null
         }
     }
-// Fetch User Profile and Lists from Mongo API
-  //TODO: and load in userID from API
     componentWillMount = () => {
       axios.get('/api/lists', {
         headers: {
@@ -131,12 +129,14 @@ export default class App extends Component {
     if (event) { this.setState({ githubSearchStatus: 'error' }) }
   }
 
+
   handleDropdownItemClick = (result, language) => {
     let flatResult = _.flatten(result)[0]
     let { lists } = this.state
-    let targetList = lists[0].filter(list => list ? list.title === language : [])[0]
+    let targetList = lists ? lists[0].filter(list => list ? list.title === language : [])[0] : null
     console.log(flatResult, language, targetList)
-    if (!targetList.title) {
+    // Create the list if it doesn't exist
+    if (!targetList) {
       console.log('no list no list no list')
       axios.post('/api/lists', {
         title: language,
@@ -149,7 +149,10 @@ export default class App extends Component {
       .then(res => this.setState({ lists: res.data }))
       .catch(err => console.error(`${err}`))
       }
+    // Post to /items
+    // TODO: if items _id exists, update!
     axios.post('/api/items',  {
+        listTitle: language,
         username: flatResult.login,
         realname: flatResult.name,
         avatar: flatResult.avatar_url,
@@ -175,6 +178,7 @@ export default class App extends Component {
        // let { items } = targetList;
        // this.setState({ items: res.data })
       })
+      .then(res => console.log(res))
       .catch(err => console.error(`${err}`))
   }
   renderSearchBar = () => {
@@ -183,10 +187,10 @@ export default class App extends Component {
       <GitHubSearchBar
         passLanguages={this.mapLanguagesToState}
         onSubmit={this.handleGithubSearchSubmit}
-                            onSuggestionSubmit={this.handleSuggestionSubmit}
-                            onDropdownItemClick={this.handleDropdownItemClick}
-                            validationState={this.state.githubSearchStatus}
-                          />
+        onSuggestionSubmit={this.handleSuggestionSubmit}
+        onDropdownItemClick={this.handleDropdownItemClick}
+        validationState={this.state.githubSearchStatus}
+      />
     )
     }
   }

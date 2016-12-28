@@ -20,6 +20,7 @@ module.exports = {
       }
       foundList = list;
       return new ItemModel({
+        listTitle: req.body.listTitle,
         avatar: req.body.avatar,
         githubID: req.body.githubID,
         list: listId,

@@ -1,3 +1,4 @@
+//TODO: need to clean up - items should be embedded within the returned Lists
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

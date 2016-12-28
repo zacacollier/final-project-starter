@@ -2,12 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const itemSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-  },
 
-  realname: {
+  username: {
     type: String,
     required: true,
   },
@@ -16,6 +12,15 @@ const itemSchema = new mongoose.Schema({
     type: String,
   },
 
+  listTitle: {
+    type: String,
+    required: true,
+  },
+
+  realname: {
+    type: String,
+    required: true,
+  },
   githubID: {
     type: Number,
     required: true,
