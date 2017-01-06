@@ -14,10 +14,9 @@ export default class Suggestion extends Component {
       languages: []
     }
   }
-  componentDidMount = () => {
-    if (this.props.languages !== null) {
-    this.setState({ languages: this.props.languages }, () => this.renderLanguages(this.props.languages))
-    }
+  componentWillReceiveProps = (nextProps) => {
+    console.log(nextProps)
+    this.setState({ languages: nextProps.languages }, () => this.renderLanguages(this.state.languages))
   }
   handleSuggestionClick = (event) => {
     event.preventDefault();

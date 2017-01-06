@@ -40,9 +40,7 @@ export default class App extends Component {
     }
 
     mapLanguagesToState = (languages) => {
-      // Remove duplicates
-      let uniqLanguages = _.uniqWith(languages, _.isEqual)
-      this.setState({ languages: uniqLanguages })
+      this.setState({ languages: languages })
     }
 
     handleSignUp = (credentials) => {
