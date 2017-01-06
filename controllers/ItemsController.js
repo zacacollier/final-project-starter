@@ -2,16 +2,32 @@ const ItemModel = require('../models/ItemModel');
 const ListModel = require('../models/ListModel');
 
 module.exports = {
-
+// Update
+    update(req, res, next) {
+      ListModel.findOne({
+        title: req.params.title,
+        user: req.user._id,
+        _id: req.params.id,
+      },
+        {
+          $set: {
+            items: req.body.items
+          }
+        },
+        { new: true }
+      )
+      .exec()
+      .then(list => res.json(list))
+      .catch(next)
+   },
+// Create
   create(req, res, next) {
-    const listId = req.body.list;
-    const userId = req.user._id;
     let newItem;
     let foundList;
 
     ListModel.findOne({
-      user: userId,
-      _id: listId,
+      user: req.body.list,
+      _id: req.user._id,
     })
     .exec()
     .then(list => {
@@ -23,10 +39,10 @@ module.exports = {
         listTitle: req.body.listTitle,
         avatar: req.body.avatar,
         githubID: req.body.githubID,
-        list: listId,
+        list: req.body.list,
         realname: req.body.realname,
         repos: req.body.repos,
-        user: userId,
+        user: req.user._id,
         username: req.body.username,
       }).save();
     })
@@ -38,7 +54,7 @@ module.exports = {
       .then(() => res.json(newItem))
       .catch(next);
     },
-
+// Remove
   remove(req, res, next) {
     ItemModel.findOneAndRemove({
       user: req.user._id,

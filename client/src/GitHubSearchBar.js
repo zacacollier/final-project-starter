@@ -76,11 +76,12 @@ export default class GitHubSearchBar extends Component {
       return _.countBy(languages, lang)
     })
     let sort = count.map((each) => {
-      return Object.entries(each).filter((n) => !n.includes("undefined"))
+      return Object.entries(each).filter((each) => !each.includes("undefined"))
     })
-    let filter = _.flatten(sort.filter((x) => x.length > 1 )).filter((y) => !y.includes("null"))
+    let filter = _.flatten(sort.filter((each) => each.length > 1 )).filter((each) => !each.includes("null"))
+    let filterDuplicatesRemoved = _.uniqWith(filter, _.isEqual)
     this.setState({
-      languages: filter
+      languages: filterDuplicatesRemoved
     }, () => {
       this.props.passLanguages(this.state.languages)
     })

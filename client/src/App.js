@@ -40,7 +40,9 @@ export default class App extends Component {
     }
 
     mapLanguagesToState = (languages) => {
-      this.setState({ languages: languages })
+      // Remove duplicates
+      let uniqLanguages = _.uniqWith(languages, _.isEqual)
+      this.setState({ languages: uniqLanguages })
     }
 
     handleSignUp = (credentials) => {
@@ -149,8 +151,12 @@ export default class App extends Component {
       .then(res => this.setState({ lists: res.data }))
       .catch(err => console.error(`${err}`))
       }
-    // Post to /items
-    // TODO: if items _id exists, update!
+    // If the GitHub user exists in items, update
+    // Do so by populating & rendering the lists with items,
+    // then check to see if the user data exists there
+    if (targetList.items.githubID === flatResult.id) {
+      axios.put(`/api/lists/${targetList._id}`)
+    }
     axios.post('/api/items',  {
         listTitle: language,
         username: flatResult.login,

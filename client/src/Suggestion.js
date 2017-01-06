@@ -34,7 +34,7 @@ export default class Suggestion extends Component {
     if (this.state.languages.length > 0) {
       return this.state.languages.map((each) => {
         return (
-          <MenuItem onClick={() => this.props.onDropdownItemClick(this.props.results, each[0])}>
+          <MenuItem onClick={() => this.props.onDropdownItemClick(this.props.results[0], each[0])}>
             <Badge >{each[0]} <FaGenderless /> {each[1]}</Badge>
           </MenuItem>
       )
