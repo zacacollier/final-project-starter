@@ -7,6 +7,7 @@ import { Alert } from 'react-bootstrap';
 import SignUpSignIn from './SignUpSignIn';
 import TopNavbar from './TopNavbar';
 import GitHubSearchBar from './GitHubSearchBar.js';
+import Lists from './Lists.js';
 import Secret from './Secret';
 import './App.css';
 
@@ -188,17 +189,32 @@ export default class App extends Component {
   renderSearchBar = () => {
     if (!this.state.signInSuccess) {
     return(
-      <GitHubSearchBar
-        passLanguages={this.mapLanguagesToState}
-        onSubmit={this.handleGithubSearchSubmit}
-        onSuggestionSubmit={this.handleSuggestionSubmit}
-        onDropdownItemClick={this.handleDropdownItemClick}
-        validationState={this.state.githubSearchStatus}
-      />
+      <div>
+        <GitHubSearchBar
+          passLanguages={this.mapLanguagesToState}
+          onSubmit={this.handleGithubSearchSubmit}
+          onSuggestionSubmit={this.handleSuggestionSubmit}
+          onDropdownItemClick={this.handleDropdownItemClick}
+          validationState={this.state.githubSearchStatus}
+        />
+      </div>
     )
     }
   }
+  renderLists = () => {
+      return (
+        <Lists
+          lists={this.state.lists}
+        />
+      )
+  }
     renderApp() {
+                            //onAfterOpen={setTimeout(() => {
+                            //  this.setState({
+                            //  signInSuccess: false
+                            //  })
+                            //}, 4000)
+                           //}
         return (
             <div>
                 <Match
@@ -212,18 +228,13 @@ export default class App extends Component {
                             onRequestClose={this.props.onRequestClose}
                             closeTimeoutMS={3000}
                             contentLabel="Modal"
-                            onAfterOpen={setTimeout(() => {
-                              this.setState({
-                              signInSuccess: false
-                              })
-                            }, 4000)
-                            }
                           >
                             <Alert onClick={this.handleAlertClick} bsStyle="success">
                               <strong>Logged In Successfully!</strong>
                             </Alert>
                           </Modal>
                           { this.renderSearchBar() }
+                          { this.renderLists() }
                         </div>
                       )}
                       }
