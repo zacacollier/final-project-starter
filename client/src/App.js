@@ -27,7 +27,7 @@ export default class App extends Component {
             languages: null
         }
     }
-    componentWillMount = () => {
+    getInitialLists = () => {
       axios.get('/api/lists', {
         headers: {
           authorization: localStorage.getItem('token')
@@ -36,7 +36,7 @@ export default class App extends Component {
       .then((res) => this.setState({
         lists: [res.data],
         userID: res.data[0].user,
-      }))
+      }, () => this.renderLists()))
       .catch(err => console.error(`Axios - could not GET from ${URL}: ${err}`))
     }
 
@@ -204,11 +204,11 @@ export default class App extends Component {
   renderLists = () => {
       return (
         <Lists
-          lists={this.state.lists}
+          lists={_.flatten(this.state.lists)}
         />
       )
   }
-    renderApp() {
+    renderApp = () => {
                             //onAfterOpen={setTimeout(() => {
                             //  this.setState({
                             //  signInSuccess: false
@@ -234,7 +234,7 @@ export default class App extends Component {
                             </Alert>
                           </Modal>
                           { this.renderSearchBar() }
-                          { this.renderLists() }
+                          { this.state.lists ? this.renderLists() : this.getInitialLists() }
                         </div>
                       )}
                       }
