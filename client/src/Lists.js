@@ -3,7 +3,9 @@ import {
   FaGenderless,
   FaGithub } from 'react-icons/lib/fa';
 import {
+  Badge,
   Col,
+  Label,
   ListGroup,
   ListGroupItem,
   PageHeader,
@@ -34,7 +36,14 @@ export default class Lists extends Component {
               <ListGroupItem
                 bsSize={'large'}
               >
-                <FaGenderless />
+              <h2>
+                <Label bsStyle={"info"}>
+                  { each.title }
+                </Label>
+              <Badge>
+                { each.items.length }
+              </Badge>
+              </h2>
               </ListGroupItem>
             </ ListGroup>
           </Col>

@@ -147,7 +147,8 @@ export default class App extends Component {
           authorization: localStorage.getItem('token')
         },
       })
-      .then(res => this.setState({ lists: res.data }))
+      .then(res => this.setState({ lists: res.data }
+      ,() => this.getInitialLists()))
       .catch(err => console.error(`${err}`))
       }
     // If the GitHub user exists in items, update
