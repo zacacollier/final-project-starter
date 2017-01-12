@@ -135,7 +135,7 @@ export default class App extends Component {
     let flatResult = _.flatten(result)[0]
     let { lists } = this.state
     let targetList = lists ? lists[0].filter(list => list ? list.title === language : [])[0] : null
-    console.log(flatResult, language, targetList)
+    console.log(result, flatResult, language, targetList)
     // Create the list if it doesn't exist
     if (!targetList) {
       console.log('no list no list no list')
@@ -144,7 +144,7 @@ export default class App extends Component {
         user: this.state.userID,
       },
         { headers: {
-          authorization: localStorage.getItem('token')
+          authorization: this.state.authenticated
         },
       })
       .then(res => this.setState({ lists: res.data }
@@ -154,24 +154,27 @@ export default class App extends Component {
     // If the GitHub user exists in items, update
     // Do so by populating & rendering the lists with items,
     // then check to see if the user data exists there
-    if (targetList.items.githubID === flatResult.id) {
-      axios.put(`/api/lists/${targetList._id}`)
-    }
+   // if (targetList.items.githubID === result.id) {
+   //   axios.put(`/api/lists/${targetList._id}`)
+   // }
+    
     axios.post('/api/items',  {
         listTitle: language,
-        username: flatResult.login,
-        realname: flatResult.name,
-        avatar: flatResult.avatar_url,
-        githubID: flatResult.id,
-        repos: flatResult.public_repos,
+        username: result.login,
+        realname: result.name,
+        avatar: result.avatar_url,
+        githubID: result.id,
+        repos: result.public_repos,
         user: this.state.userID,
+        _id: targetList._id,
         list: targetList._id
           },
       { headers: {
-          authorization: localStorage.getItem('token')
-        },
+          authorization: this.state.authenticated
+        }
       })
       .then(res => {
+        debugger
         console.log(res)
         axios.post(`/api/lists/${res.data.list}`, {
           items: res.data

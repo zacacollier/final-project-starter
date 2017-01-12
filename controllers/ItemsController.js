@@ -24,15 +24,15 @@ module.exports = {
   create(req, res, next) {
     let newItem;
     let foundList;
-
+// Find the list, then create Items
     ListModel.findOne({
-      user: req.body.list,
-      _id: req.user._id,
+      user: req.body.user,
+      _id: req.body._id,
     })
     .exec()
     .then(list => {
       if (!list) {
-        return res.status(401).json('Cannot add item to this list');
+        return res.status(500).json('Cannot add item to this list');
       }
       foundList = list;
       return new ItemModel({
