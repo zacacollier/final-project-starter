@@ -157,7 +157,6 @@ export default class App extends Component {
    // if (targetList.items.githubID === result.id) {
    //   axios.put(`/api/lists/${targetList._id}`)
    // }
-    
     axios.post('/api/items',  {
         listTitle: language,
         username: result.login,
@@ -173,21 +172,23 @@ export default class App extends Component {
           authorization: this.state.authenticated
         }
       })
-      .then(res => {
-        debugger
-        console.log(res)
-        axios.post(`/api/lists/${res.data.list}`, {
-          items: res.data
-        },
-          { headers: {
-            authorization: localStorage.getItem('token')
-          },
-        })
-      .then(res => console.log(res))
+     // .then(res => {
+     //   console.log(res)
+     //   axios.post(`/api/lists/${res.data.list}`, {
+     //     items: res.data
+     //   },
+     //     { headers: {
+     //       authorization: localStorage.getItem('token')
+     //     },
+     //   })
+     // .then(res => console.log(res))
        // let { items } = targetList;
        // this.setState({ items: res.data })
+      //})
+      .then(res => {
+        console.log(res)
+        this.getInitialLists()
       })
-      .then(res => console.log(res))
       .catch(err => console.error(`${err}`))
   }
   renderSearchBar = () => {

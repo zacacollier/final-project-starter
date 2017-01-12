@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   FaGenderless,
   FaGithub } from 'react-icons/lib/fa';
+import { GoRepo } from 'react-icons/lib/go';
 import {
   Badge,
   Col,
@@ -39,10 +40,12 @@ export default class Lists extends Component {
               <h2>
                 <Label bsStyle={"info"}>
                   { each.title }
+                  { '  ' }
+                <Badge>
+                  <GoRepo />
+                  { each.items.length }
+                </Badge>
                 </Label>
-              <Badge>
-                { each.items.length }
-              </Badge>
               </h2>
               </ListGroupItem>
             </ ListGroup>
