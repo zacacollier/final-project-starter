@@ -151,12 +151,6 @@ export default class App extends Component {
       ,() => this.getInitialLists()))
       .catch(err => console.error(`${err}`))
       }
-    // If the GitHub user exists in items, update
-    // Do so by populating & rendering the lists with items,
-    // then check to see if the user data exists there
-   // if (targetList.items.githubID === result.id) {
-   //   axios.put(`/api/lists/${targetList._id}`)
-   // }
     axios.post('/api/items',  {
         listTitle: language,
         username: result.login,
@@ -172,19 +166,6 @@ export default class App extends Component {
           authorization: this.state.authenticated
         }
       })
-     // .then(res => {
-     //   console.log(res)
-     //   axios.post(`/api/lists/${res.data.list}`, {
-     //     items: res.data
-     //   },
-     //     { headers: {
-     //       authorization: localStorage.getItem('token')
-     //     },
-     //   })
-     // .then(res => console.log(res))
-       // let { items } = targetList;
-       // this.setState({ items: res.data })
-      //})
       .then(res => {
         console.log(res)
         this.getInitialLists()
